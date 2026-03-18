@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mateo Ramírez Hernández — Technical Artist</title>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@300;400;600;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #080c10;
+      --bg2: #0d1117;
+      --bg3: #111820;
+      --accent: #00f5c4;
+      --accent2: #00bfff;
+      --accent3: #7b5ea7;
+      --text: #c8d6e5;
+      --muted: #5a7a8a;
+      --card: rgba(13,17,23,0.85);
+      --border: rgba(0,245,196,0.15);
+      --glow: 0 0 18px rgba(0,245,196,0.35);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 17px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── GRID BG ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,245,196,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,245,196,0.03) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── NOISE OVERLAY ── */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+      pointer-events: none;
+      opacity: 0.4;
+      z-index: 0;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 48px;
+      background: rgba(8,12,16,0.92);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+    }
+
+    .nav-logo {
+      font-family: 'Orbitron', monospace;
+      font-size: 1rem;
+      color: var(--accent);
+      letter-spacing: 0.15em;
+      text-decoration: none;
+    }
+
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+
+    /* ── SECTIONS ── */
+    section { position: relative; z-index: 1; }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: 64px;
+      padding: 120px 72px 80px;
+    }
+
+    .hero-text { max-width: 560px; }
+
+    .hero-tag {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--accent);
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .hero-tag::before {
+      content: '';
+      display: block;
+      width: 32px; height: 1px;
+      background: var(--accent);
+    }
+
+    h1 {
+      font-family: 'Orbitron', monospace;
+      font-size: clamp(2.4rem, 5vw, 4rem);
+      font-weight: 900;
+      line-height: 1.05;
+      color: #fff;
+      margin-bottom: 10px;
+    }
+
+    .hero-subtitle {
+      font-family: 'Orbitron', monospace;
+      font-size: clamp(1rem, 2vw, 1.4rem);
+      color: var(--accent);
+      margin-bottom: 28px;
+      letter-spacing: 0.05em;
+    }
+
+    .hero-desc {
+      font-size: 1.05rem;
+      color: var(--text);
+      max-width: 460px;
+      margin-bottom: 40px;
+      font-weight: 300;
+    }
+
+    .cta-group { display: flex; gap: 16px; flex-wrap: wrap; }
+
+    .btn {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.8rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 12px 28px;
+      border-radius: 2px;
+      text-decoration: none;
+      transition: all 0.25s;
+      display: inline-block;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: #080c10;
+      font-weight: 700;
+    }
+    .btn-primary:hover {
+      box-shadow: var(--glow);
+      transform: translateY(-2px);
+    }
+    .btn-outline {
+      border: 1px solid var(--border);
+      color: var(--accent);
+      background: transparent;
+    }
+    .btn-outline:hover {
+      border-color: var(--accent);
+      background: rgba(0,245,196,0.07);
+      transform: translateY(-2px);
+    }
+
+    /* Photo card */
+    .hero-visual {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .photo-frame {
+      position: relative;
+      width: 300px;
+      height: 380px;
+    }
+
+    .photo-frame::before {
+      content: '';
+      position: absolute;
+      top: -6px; left: -6px;
+      right: 6px; bottom: 6px;
+      border: 1px solid var(--accent);
+      opacity: 0.4;
+      border-radius: 3px;
+    }
+    .photo-frame::after {
+      content: '';
+      position: absolute;
+      top: 6px; left: 6px;
+      right: -6px; bottom: -6px;
+      border: 1px solid var(--accent2);
+      opacity: 0.25;
+      border-radius: 3px;
+    }
+
+    .photo-placeholder {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #0d1117 0%, #111820 50%, #0a1628 100%);
+      border-radius: 2px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .photo-placeholder img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .photo-placeholder .initials {
+      font-family: 'Orbitron', monospace;
+      font-size: 4rem;
+      font-weight: 900;
+      color: var(--accent);
+      opacity: 0.3;
+      line-height: 1;
+    }
+    .photo-placeholder .name-badge {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--muted);
+      letter-spacing: 0.2em;
+      margin-top: 12px;
+    }
+
+    .stats-bar {
+      display: flex;
+      gap: 32px;
+      margin-top: 12px;
+    }
+
+    .stat { text-align: center; }
+    .stat-num {
+      font-family: 'Orbitron', monospace;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1;
+    }
+    .stat-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.68rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    /* ── SECTION WRAPPER ── */
+    .section-wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 100px 48px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 60px;
+    }
+
+    .section-num {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--accent);
+      letter-spacing: 0.15em;
+    }
+
+    h2 {
+      font-family: 'Orbitron', monospace;
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.04em;
+    }
+
+    .line-accent {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, var(--border), transparent);
+    }
+
+    /* ── ABOUT ── */
+    #about { background: var(--bg2); }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: start;
+    }
+
+    .about-info { display: flex; flex-direction: column; gap: 16px; }
+
+    .info-row {
+      display: flex;
+      align-items: baseline;
+      gap: 16px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .info-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      min-width: 110px;
+    }
+
+    .info-val {
+      font-size: 1rem;
+      color: var(--text);
+      font-weight: 400;
+    }
+
+    .info-val a { color: var(--accent2); text-decoration: none; }
+    .info-val a:hover { text-decoration: underline; }
+
+    /* What is a TA box */
+    .ta-box {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 36px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ta-box::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 3px; height: 100%;
+      background: linear-gradient(180deg, var(--accent), var(--accent3));
+    }
+
+    .ta-box h3 {
+      font-family: 'Orbitron', monospace;
+      font-size: 0.95rem;
+      color: var(--accent);
+      margin-bottom: 20px;
+      letter-spacing: 0.1em;
+    }
+
+    .ta-list { list-style: none; display: flex; flex-direction: column; gap: 14px; }
+    .ta-list li {
+      display: flex;
+      gap: 12px;
+      font-size: 0.95rem;
+      color: var(--text);
+      font-weight: 300;
+    }
+    .ta-list li::before {
+      content: '▸';
+      color: var(--accent);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    /* ── SKILLS ── */
+    #skills { background: var(--bg); }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+    }
+
+    .skill-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 28px;
+      transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .skill-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-4px);
+      box-shadow: var(--glow);
+    }
+
+    .skill-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s;
+    }
+    .skill-card:hover::after { transform: scaleX(1); }
+
+    .skill-cat {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      margin-bottom: 14px;
+    }
+
+    .skill-icon {
+      font-size: 1.8rem;
+      margin-bottom: 12px;
+    }
+
+    .skill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .tag {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--text);
+      background: rgba(0,245,196,0.07);
+      border: 1px solid rgba(0,245,196,0.15);
+      padding: 4px 10px;
+      border-radius: 2px;
+    }
+
+    /* ── PORTFOLIO ── */
+    #portfolio { background: var(--bg2); }
+
+    .port-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+    }
+
+    .port-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+      transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+    }
+
+    .port-card:hover {
+      border-color: var(--accent2);
+      transform: translateY(-4px);
+      box-shadow: 0 0 20px rgba(0,191,255,0.2);
+    }
+
+    .port-card-header {
+      padding: 28px 28px 0;
+    }
+
+    .port-type {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.68rem;
+      color: var(--accent2);
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      margin-bottom: 10px;
+    }
+
+    .port-title {
+      font-family: 'Orbitron', monospace;
+      font-size: 1.05rem;
+      color: #fff;
+      margin-bottom: 10px;
+    }
+
+    .port-desc {
+      font-size: 0.9rem;
+      color: var(--muted);
+      font-weight: 300;
+      margin-bottom: 20px;
+    }
+
+    .port-links {
+      padding: 0 28px 28px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .port-link {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--accent);
+      text-decoration: none;
+      border: 1px solid var(--border);
+      padding: 6px 14px;
+      border-radius: 2px;
+      letter-spacing: 0.08em;
+      transition: all 0.2s;
+    }
+    .port-link:hover {
+      border-color: var(--accent);
+      background: rgba(0,245,196,0.07);
+    }
+
+    /* apps list */
+    .apps-list {
+      padding: 0 28px 28px;
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .apps-list li {
+      font-size: 0.88rem;
+    }
+
+    .apps-list a {
+      color: var(--accent2);
+      text-decoration: none;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.78rem;
+    }
+    .apps-list a:hover { text-decoration: underline; }
+
+    .apps-list .app-name {
+      color: var(--text);
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    /* ── CONTACT ── */
+    #contact { background: var(--bg); }
+
+    .contact-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+    }
+
+    .contact-text h3 {
+      font-family: 'Orbitron', monospace;
+      font-size: 1.5rem;
+      color: #fff;
+      margin-bottom: 16px;
+    }
+
+    .contact-text p {
+      font-size: 1rem;
+      color: var(--muted);
+      font-weight: 300;
+      max-width: 380px;
+    }
+
+    .contact-links { display: flex; flex-direction: column; gap: 16px; }
+
+    .contact-link {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 18px 24px;
+      text-decoration: none;
+      transition: all 0.25s;
+    }
+
+    .contact-link:hover {
+      border-color: var(--accent);
+      box-shadow: var(--glow);
+      transform: translateX(4px);
+    }
+
+    .contact-link-icon {
+      font-size: 1.3rem;
+      width: 32px;
+      text-align: center;
+    }
+
+    .contact-link-info {}
+    .contact-link-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      display: block;
+      margin-bottom: 2px;
+    }
+    .contact-link-val {
+      font-size: 0.95rem;
+      color: var(--text);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 32px;
+      border-top: 1px solid var(--border);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes pulse-border {
+      0%, 100% { opacity: 0.15; }
+      50%       { opacity: 0.45; }
+    }
+
+    .hero-text > * {
+      animation: fadeUp 0.7s ease both;
+    }
+    .hero-text .hero-tag    { animation-delay: 0.1s; }
+    .hero-text h1           { animation-delay: 0.2s; }
+    .hero-text .hero-subtitle { animation-delay: 0.3s; }
+    .hero-text .hero-desc   { animation-delay: 0.4s; }
+    .hero-text .cta-group   { animation-delay: 0.5s; }
+    .hero-text .stats-bar   { animation-delay: 0.6s; }
+
+    .hero-visual {
+      animation: fadeUp 0.9s 0.3s ease both;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      nav { padding: 14px 24px; }
+      .nav-links { gap: 20px; }
+
+      #hero {
+        grid-template-columns: 1fr;
+        padding: 110px 28px 60px;
+        text-align: center;
+      }
+      .hero-tag { justify-content: center; }
+      .hero-desc { margin: 0 auto 36px; }
+      .cta-group { justify-content: center; }
+      .stats-bar { justify-content: center; }
+      .hero-visual { order: -1; }
+      .photo-frame { width: 200px; height: 260px; }
+
+      .section-wrap { padding: 72px 24px; }
+      .about-grid, .contact-inner { grid-template-columns: 1fr; gap: 40px; }
+    }
+
+    @media (max-width: 600px) {
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#hero" class="nav-logo">MRH_</a>
+  <ul class="nav-links">
+    <li><a href="#about">Sobre mí</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#portfolio">Portfolio</a></li>
+    <li><a href="#contact">Contacto</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-text">
+    <div class="hero-tag">Technical Artist · Game Dev</div>
+    <h1>Mateo<br>Ramírez<br>Hernández</h1>
+    <div class="hero-subtitle">Diseño Interactivo · EAFIT</div>
+    <p class="hero-desc">
+      Artista técnico que une arte y programación en la industria de videojuegos.
+      Creo herramientas, optimizo pipelines y llevo la visión artística al motor.
+    </p>
+    <div class="cta-group">
+      <a href="#portfolio" class="btn btn-primary">Ver portfolio</a>
+      <a href="#contact" class="btn btn-outline">Contactarme</a>
+    </div>
+    <div class="stats-bar" style="margin-top:40px;">
+      <div class="stat">
+        <div class="stat-num">7°</div>
+        <div class="stat-label">Semestre</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">5+</div>
+        <div class="stat-label">Proyectos</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">B1</div>
+        <div class="stat-label">Inglés</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-visual">
+    <div class="photo-frame">
+      <div class="photo-placeholder">
+        <!-- Reemplaza el src con tu foto: imagenes/Foto Mateo.jpeg -->
+        <img src="imagenes/Foto Mateo.jpeg" alt="Mateo Ramírez Hernández"
+             onerror="this.style.display='none'; document.getElementById('fallback').style.display='flex';">
+        <div id="fallback" style="display:none; flex-direction:column; align-items:center; justify-content:center; position:absolute; inset:0;">
+          <div class="initials">MRH</div>
+          <div class="name-badge">Technical Artist</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-wrap">
+    <div class="section-header">
+      <span class="section-num">// 01</span>
+      <h2>Sobre mí</h2>
+      <div class="line-accent"></div>
+    </div>
+
+    <div class="about-grid">
+      <div class="about-info">
+        <div class="info-row"><span class="info-label">Nombre</span><span class="info-val">Mateo Ramírez Hernández</span></div>
+        <div class="info-row"><span class="info-label">Edad</span><span class="info-val">20 años</span></div>
+        <div class="info-row"><span class="info-label">Nacimiento</span><span class="info-val">16 / 12 / 2004</span></div>
+        <div class="info-row"><span class="info-label">País</span><span class="info-val">Colombia 🇨🇴</span></div>
+        <div class="info-row"><span class="info-label">Email</span><span class="info-val"><a href="mailto:mateo16124@gmail.com">mateo16124@gmail.com</a></span></div>
+        <div class="info-row"><span class="info-label">Formación</span><span class="info-val">Diseño Interactivo — EAFIT (7° sem.)</span></div>
+        <div class="info-row"><span class="info-label">Inglés</span><span class="info-val">Nivel B1</span></div>
+      </div>
+
+      <div class="ta-box">
+        <h3>¿Qué es un Technical Artist?</h3>
+        <ul class="ta-list">
+          <li>Integra assets de arte (3D, texturas, animaciones) dentro del game engine de forma eficiente.</li>
+          <li>Desarrolla herramientas personalizadas para automatizar flujos de trabajo y mejorar la colaboración.</li>
+          <li>Investiga nuevas tecnologías de gráficos, motores y software de creación de contenido.</li>
+          <li>Optimiza el rendimiento logrando la mejor calidad visual sin sacrificar los FPS del juego.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-wrap">
+    <div class="section-header">
+      <span class="section-num">// 02</span>
+      <h2>Habilidades</h2>
+      <div class="line-accent"></div>
+    </div>
+
+    <div class="skills-grid">
+      <div class="skill-card">
+        <div class="skill-cat">Audiovisual</div>
+        <div class="skill-icon">🎬</div>
+        <div class="skill-tags">
+          <span class="tag">Premiere Pro</span>
+        </div>
+      </div>
+
+      <div class="skill-card">
+        <div class="skill-cat">Diseño Gráfico</div>
+        <div class="skill-icon">🎨</div>
+        <div class="skill-tags">
+          <span class="tag">Photoshop</span>
+          <span class="tag">Maya</span>
+          <span class="tag">Clip Studio EX</span>
+        </div>
+      </div>
+
+      <div class="skill-card">
+        <div class="skill-cat">Programación</div>
+        <div class="skill-icon">💻</div>
+        <div class="skill-tags">
+          <span class="tag">HTML</span>
+          <span class="tag">Python</span>
+          <span class="tag">JavaScript</span>
+        </div>
+      </div>
+
+      <div class="skill-card">
+        <div class="skill-cat">Unity</div>
+        <div class="skill-icon">🎮</div>
+        <div class="skill-tags">
+          <span class="tag">C#</span>
+          <span class="tag">Unity 2D</span>
+          <span class="tag">VR</span>
+        </div>
+      </div>
+
+      <div class="skill-card">
+        <div class="skill-cat">Unreal Engine</div>
+        <div class="skill-icon">⚡</div>
+        <div class="skill-tags">
+          <span class="tag">C++</span>
+          <span class="tag">Blueprints</span>
+        </div>
+      </div>
+
+      <div class="skill-card">
+        <div class="skill-cat">IA / Apps</div>
+        <div class="skill-icon">🤖</div>
+        <div class="skill-tags">
+          <span class="tag">Streamlit</span>
+          <span class="tag">YOLO</span>
+          <span class="tag">OCR</span>
+          <span class="tag">TTS</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PORTFOLIO -->
+<section id="portfolio">
+  <div class="section-wrap">
+    <div class="section-header">
+      <span class="section-num">// 03</span>
+      <h2>Portfolio</h2>
+      <div class="line-accent"></div>
+    </div>
+
+    <div class="port-grid">
+
+      <!-- Modelado 3D -->
+      <div class="port-card">
+        <div class="port-card-header">
+          <div class="port-type">Arte · 3D</div>
+          <div class="port-title">Modelado 3D Orgánico</div>
+          <p class="port-desc">Modelos orgánicos creados en Maya con proceso documentado.</p>
+        </div>
+        <div class="port-links">
+          <a class="port-link" href="https://drive.google.com/drive/folders/1T_FSsQqFG1Yv8VF13Pc5bpq3KE-Z3uyP" target="_blank">Drive Folder</a>
+          <a class="port-link" href="https://www.canva.com/design/DAF1GsRpG_g/2i9SlhjBRzjlWg9WwzcP_w/edit" target="_blank">Log Canva</a>
+        </div>
+      </div>
+
+      <!-- Animación 3D -->
+      <div class="port-card">
+        <div class="port-card-header">
+          <div class="port-type">Arte · Animación</div>
+          <div class="port-title">Animación 3D</div>
+          <p class="port-desc">Ciclos y secuencias de animación tridimensional.</p>
+        </div>
+        <div class="port-links">
+          <a class="port-link" href="https://drive.google.com/drive/folders/14l1-RwRxXZr_hVQ5jVlSVlHoT_TOui2y" target="_blank">Drive Folder</a>
+        </div>
+      </div>
+
+      <!-- CRITTERS -->
+      <div class="port-card">
+        <div class="port-card-header">
+          <div class="port-type">Videojuego · Unity 2D</div>
+          <div class="port-title">CRITTERS — El Viaje de Xeno</div>
+          <p class="port-desc">Videojuego 2D desarrollado en Unity con C#. Incluye diseño, trailer y código fuente.</p>
+        </div>
+        <div class="port-links">
+          <a class="port-link" href="https://www.canva.com/design/DAFhbxeNWMQ/MUVGTi8BvjtK2oyH9ltKSw/view" target="_blank">Presentación</a>
+          <a class="port-link" href="https://www.youtube.com/watch?v=pYGJ8L_Op7g" target="_blank">Video Dev</a>
+          <a class="port-link" href="https://github.com/SrRexxo/El-Viaje-de-Xeno" target="_blank">GitHub</a>
+        </div>
+      </div>
+
+      <!-- Enigma Eterno VR -->
+      <div class="port-card">
+        <div class="port-card-header">
+          <div class="port-type">Videojuego · Unity VR</div>
+          <div class="port-title">Enigma Eterno</div>
+          <p class="port-desc">Juego de realidad virtual desarrollado en Unity con mecánicas de puzzle inmersivo.</p>
+        </div>
+        <div class="port-links">
+          <a class="port-link" href="https://www.canva.com/design/DAGO5CpM2JQ/3KLHi3pdgJN7Qjd6-I-F5Q/edit" target="_blank">One Pager</a>
+          <a class="port-link" href="https://drive.google.com/file/d/1YxidxrpqbCJaucTM1vzNkwK0SWYOdVzC/view" target="_blank">Gameplay</a>
+        </div>
+      </div>
+
+      <!-- Apps Multimodales -->
+      <div class="port-card">
+        <div class="port-card-header">
+          <div class="port-type">Apps · Python · IA</div>
+          <div class="port-title">Aplicaciones Multimodales</div>
+          <p class="port-desc">Suite de apps con IA desarrolladas en Python y desplegadas con Streamlit.</p>
+        </div>
+        <ul class="apps-list">
+          <li><span class="app-name">Prototipo App</span><a href="https://prototipoapp.streamlit.app" target="_blank">prototipoapp.streamlit.app</a></li>
+          <li><span class="app-name">Traductor</span><a href="https://traductor-suhi3zwnuwehya73im9lfa.streamlit.app" target="_blank">traductor.streamlit.app</a></li>
+          <li><span class="app-name">Text to Speech</span><a href="https://apptts.streamlit.app" target="_blank">apptts.streamlit.app</a></li>
+          <li><span class="app-name">OCR</span><a href="https://appocr.streamlit.app" target="_blank">appocr.streamlit.app</a></li>
+          <li><span class="app-name">Análisis de Imagen</span><a href="https://visionapp-tld.streamlit.app" target="_blank">visionapp.streamlit.app</a></li>
+          <li><span class="app-name">Detector de Objetos (YOLO)</span><a href="https://yolo-2.streamlit.app" target="_blank">yolo-2.streamlit.app</a></li>
+        </ul>
+      </div>
+
+      <!-- Trabajo independiente -->
+      <div class="port-card">
+        <div class="port-card-header">
+          <div class="port-type">Arte · Independiente</div>
+          <div class="port-title">Trabajo Independiente</div>
+          <p class="port-desc">Proyectos personales, experimentos artísticos y práctica continua.</p>
+        </div>
+        <div class="port-links">
+          <a class="port-link" href="https://drive.google.com/drive/folders/1zBPx4QNuOwivZKB7w8IfOoRlMRewGEMP" target="_blank">Google Drive</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-wrap">
+    <div class="section-header">
+      <span class="section-num">// 04</span>
+      <h2>Contacto</h2>
+      <div class="line-accent"></div>
+    </div>
+
+    <div class="contact-inner">
+      <div class="contact-text">
+        <h3>¿Trabajamos juntos?</h3>
+        <p>
+          Estoy disponible para proyectos de videojuegos, arte técnico, herramientas de pipeline,
+          y colaboraciones creativas. No dudes en escribirme.
+        </p>
+      </div>
+
+      <div class="contact-links">
+        <a href="mailto:mateo16124@gmail.com" class="contact-link">
+          <span class="contact-link-icon">✉️</span>
+          <div class="contact-link-info">
+            <span class="contact-link-label">Email</span>
+            <span class="contact-link-val">mateo16124@gmail.com</span>
+          </div>
+        </a>
+        <a href="https://www.linkedin.com/in/mateo-ramírez-hernández-a20500258/" target="_blank" class="contact-link">
+          <span class="contact-link-icon">💼</span>
+          <div class="contact-link-info">
+            <span class="contact-link-label">LinkedIn</span>
+            <span class="contact-link-val">Mateo Ramírez Hernández</span>
+          </div>
+        </a>
+        <a href="https://github.com/SrRexxo" target="_blank" class="contact-link">
+          <span class="contact-link-icon">🐙</span>
+          <div class="contact-link-info">
+            <span class="contact-link-label">GitHub</span>
+            <span class="contact-link-val">github.com/SrRexxo</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  © 2025 Mateo Ramírez Hernández &nbsp;·&nbsp; Technical Artist &nbsp;·&nbsp; EAFIT University
+</footer>
+
+</body>
+</html>
